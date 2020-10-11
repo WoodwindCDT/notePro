@@ -4,6 +4,9 @@ var $saveNoteBtn = $(".save-note");
 var $newNoteBtn = $(".new-note");
 var $noteList = $(".list-container .list-group");
 
+// Constant for a randomly generated number
+const myRnId = () => parseInt(Date.now() * Math.random());
+
 // activeNote is used to keep track of the note in the textarea
 var activeNote = {};
 
@@ -53,7 +56,8 @@ var renderActiveNote = function() {
 var handleNoteSave = function() {
   var newNote = {
     title: $noteTitle.val(),
-    text: $noteText.val()
+    text: $noteText.val(),
+    id: myRnId()
   };
 
   saveNote(newNote).then(function(data) {
