@@ -2,6 +2,10 @@ const express = require('express');
 const PORT = process.env.PORT || 3001;
 const fs = require('fs');
 const path = require('path');
+let data = JSON.parse(fs.readFileSync("./Develop/db/db.json", "utf8"));
+
+// Added to make later chaining methods
+const app = express();
 
 // Const WriteData function to transfrom 
 const dataWrite = function() {
@@ -10,23 +14,24 @@ const dataWrite = function() {
     });
 };
 
-// Added to make later chaining methods
-const app = express();
-
 // To parse incoming string or array data
 app.use(express.urlencoded({ extended: true }));
 // To parse incoming JSON data
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static('./Develop/public'));
 
 
 // GET functions for getting to specfic HTML
 app.get("/", function(req, res) {
-    res.sendFile(path.join(__dirname, "./Develop/public/index.html"));
+    res.sendFile(path.join(__dirname, './Develop/public/index.html'));
 });
 
 app.get("/notes", function(req, res) {
-    res.sendFile(path.join(__dirname, "./Develop/public/notes.html"));
+    res.sendFile(path.join(__dirname, './Develop/public/notes.html'));
+});
+
+app.get("/api/notes", function(req, res) {
+    return res.json(data);
 });
 
 // POST function to allow pushing of data to JSON File
@@ -46,7 +51,7 @@ app.delete("/api/notes/:id", function(req, res){
       }
       return true;
     });
-    writeData();
+    dataWrite();
     return res.json(data);
 });
 
